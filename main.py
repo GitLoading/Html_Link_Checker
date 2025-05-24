@@ -4,7 +4,7 @@ import requests
 
 st.title("Broken Link Checker for HTML Emails")
 
-uploaded_file = st.file_uploader("Upload an HTML file", type="html")
+uploaded_file = st.file_uploader("Upload an EML file", type="eml")
 
 if uploaded_file:
     html_content = uploaded_file.read()
