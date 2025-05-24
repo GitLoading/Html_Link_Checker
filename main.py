@@ -15,21 +15,26 @@ if uploaded_file:
 
     for link in links:
         href = link.get("href")
+        html_snippet = str(link)  # capture full <a> tag for debugging
 
         # Check for missing or placeholder links
         if not href or href.strip() == "" or href in ("#", "javascript:void(0)"):
-            st.warning(f"Empty or placeholder link found: {href}")
+            st.warning(f"⚠️ Placeholder or empty link: `{href}`")
+            st.code(html_snippet, language="html")
             continue
 
         if not href.startswith(("http://", "https://")):
-            st.warning(f"Ignored non-http link: {href}")
+            st.warning(f"⚠️ Ignored non-http link: `{href}`")
+            st.code(html_snippet, language="html")
             continue
 
         try:
             response = requests.head(href, allow_redirects=True, timeout=5)
             if response.status_code >= 400:
-                st.error(f"Broken: {href} (Status: {response.status_code})")
+                st.error(f"❌ Broken link: `{href}` (Status: {response.status_code})")
+                st.code(html_snippet, language="html")
             else:
-                st.success(f"OK: {href}")
+                st.success(f"✅ OK: {href}")
         except Exception as e:
-            st.warning(f"Error checking {href}: {str(e)}")
+            st.warning(f"⚠️ Error checking `{href}`: {str(e)}")
+            st.code(html_snippet, language="html")
